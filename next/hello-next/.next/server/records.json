@@ -1,0 +1,50 @@
+{
+  "modules": {
+    "byIdentifier": {
+      "multi private-next-pages/about.tsx": 0,
+      "multi private-next-pages/index.js": 1,
+      "multi private-next-pages/p/[id].js": 2,
+      "multi private-next-pages/post.js": 3,
+      "multi next/dist/pages/_app": 4,
+      "multi next/dist/pages/_error": 5,
+      "multi next/dist/pages/_document": 6
+    },
+    "usedIds": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6
+    }
+  },
+  "chunks": {
+    "byName": {
+      "static/lzp3pDr7hUJnMn2-0ufmN/pages/_app.js": 0,
+      "static/lzp3pDr7hUJnMn2-0ufmN/pages/_document.js": 1,
+      "static/lzp3pDr7hUJnMn2-0ufmN/pages/_error.js": 2,
+      "static/lzp3pDr7hUJnMn2-0ufmN/pages/about.js": 3,
+      "static/lzp3pDr7hUJnMn2-0ufmN/pages/index.js": 4,
+      "static/lzp3pDr7hUJnMn2-0ufmN/pages/p/[id].js": 5,
+      "static/lzp3pDr7hUJnMn2-0ufmN/pages/post.js": 6,
+      "static/5mG8er-RHh70l6nOg25lM/pages/_app.js": 7,
+      "static/5mG8er-RHh70l6nOg25lM/pages/_document.js": 8,
+      "static/5mG8er-RHh70l6nOg25lM/pages/_error.js": 9,
+      "static/5mG8er-RHh70l6nOg25lM/pages/about.js": 10,
+      "static/5mG8er-RHh70l6nOg25lM/pages/index.js": 11,
+      "static/5mG8er-RHh70l6nOg25lM/pages/p/[id].js": 12,
+      "static/5mG8er-RHh70l6nOg25lM/pages/post.js": 13
+    },
+    "bySource": {},
+    "usedIds": [
+      10,
+      11,
+      12,
+      13,
+      7,
+      8,
+      9
+    ]
+  }
+}
