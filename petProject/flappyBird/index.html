@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Flappy Bird</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body>
+    <script type="text/javascript">
+      // create canvas
+      const canvas = document.createElement("canvas");
+      const context = canvas.getContext("2d");
+      const width = 288;
+      const height = 512;
+      let start = true;
+      let interval = null;
+      canvas.width = width;
+      canvas.height = height;
+      document.body.appendChild(canvas);
+
+      canvas.addEventListener("click", () => {
+        if (start) {
+          birdSpeedY = -5;
+        } else {
+          backgroundX = 0;
+          baseX = 0;
+          pipeX = width;
+          pipeY = random();
+          birdY = 200;
+          birdSpeedY = 0;
+          birdCurrentCount = 0;
+          scoreCount = 0;
+          start = true;
+          interval = setInterval(loop, 16);
+        }
+      });
+
+      // random function
+      const random = () => {
+        return Math.floor(Math.random() * (350 - 250)) + 250;
+      };
+
+      // findImageScore
+      const findImageNumber = number => {
+        const numberImage = new Image();
+        const baseSrc = "assets";
+        const numberArraySrc = [
+          `${baseSrc}/0.png`,
+          `${baseSrc}/1.png`,
+          `${baseSrc}/2.png`,
+          `${baseSrc}/3.png`,
+          `${baseSrc}/4.png`,
+          `${baseSrc}/5.png`,
+          `${baseSrc}/6.png`,
+          `${baseSrc}/7.png`,
+          `${baseSrc}/8.png`,
+          `${baseSrc}/9.png`
+        ];
+
+        for (let i = 0; i < numberArraySrc.length; i++) {
+          if (i === number) {
+            numberImage.src = numberArraySrc[i];
+            return numberImage;
+          }
+        }
+      };
+
+      // drawScore
+      const drawScore = score => {
+        let scoreX = width / 2 - 12;
+        const scoreY = 100;
+        const arrNumber = score.toString().split("");
+        if (score < 10) {
+          context.drawImage(
+            findImageNumber(Number(arrNumber[0])),
+            scoreX,
+            scoreY
+          );
+        } else if (score < 100) {
+          scoreX = width / 2 - 24;
+          context.drawImage(
+            findImageNumber(Number(arrNumber[0])),
+            scoreX,
+            scoreY
+          );
+          scoreX = width / 2;
+          context.drawImage(
+            findImageNumber(Number(arrNumber[1])),
+            scoreX,
+            scoreY
+          );
+        }
+      };
+
+      // loop to draw
+      const background = new Image();
+      background.src = "assets/background-day.png";
+      let backgroundX = 0;
+      const backgroundY = 0;
+
+      const base = new Image();
+      base.src = "assets/base.png";
+      let baseX = 0;
+      const baseY = 400;
+
+      const pipe = new Image();
+      pipe.src = "assets/pipe-green.png";
+      let pipeX = width;
+      let pipeY = random();
+
+      const birdUpFlap = new Image();
+      birdUpFlap.src = "assets/yellowbird-upflap.png";
+      const birdMidFlap = new Image();
+      birdMidFlap.src = "assets/yellowbird-midflap.png";
+      const birdDownFlap = new Image();
+      birdDownFlap.src = "assets/yellowbird-downflap.png";
+      let birdActionNow = "mid";
+      const birdX = 100;
+      let birdY = 200;
+      const acceleration = 0.2;
+      let birdSpeedY = 0;
+      let birdCurrentCount = 0;
+
+      let scoreCount = 0;
+
+      const loop = () => {
+        // background
+        backgroundX--;
+        if (backgroundX === -width) {
+          backgroundX = 0;
+        }
+        context.drawImage(background, backgroundX, backgroundY);
+        context.drawImage(background, backgroundX + width, backgroundY);
+
+        // base
+        baseX -= 2;
+        if (baseX === -width) {
+          baseX = 0;
+        }
+        context.drawImage(base, baseX, baseY);
+        context.drawImage(base, baseX + width, baseY);
+
+        // pipe
+        pipeX -= 2;
+        if (pipeX === -52) {
+          pipeX = width;
+          pipeY = random();
+        }
+
+        context.drawImage(pipe, pipeX, pipeY);
+        context.save();
+        context.scale(1, -1);
+        context.drawImage(pipe, pipeX, -pipeY + 120);
+        context.restore();
+
+        // bird
+        if (pipeX <= width - 154 && pipeX >= width - 154 - 52 - 34) {
+          if (birdY >= pipeY - 28 || birdY <= pipeY - 120) {
+            stop();
+          }
+        }
+        if (pipeX == width - 154 - 52 - 34) {
+          scoreCount++;
+        }
+
+        if (birdY < 0) {
+          birdSpeedY = 0;
+          stop();
+        } else if (birdY < height - 140) {
+          birdSpeedY += acceleration;
+          birdY += birdSpeedY;
+        } else {
+          birdSpeedY = 0;
+          stop();
+        }
+
+        if (birdActionNow === "mid") {
+          context.drawImage(birdMidFlap, birdX, birdY);
+          if (birdCurrentCount >= 0 && birdCurrentCount < 10) {
+            birdActionNow = "down";
+          }
+        } else if (birdActionNow === "down") {
+          context.drawImage(birdDownFlap, birdX, birdY);
+          if (birdCurrentCount >= 10 && birdCurrentCount < 20) {
+            birdActionNow = "up";
+          }
+        } else if (birdActionNow === "up") {
+          context.drawImage(birdUpFlap, birdX, birdY);
+          if (birdCurrentCount >= 20 && birdCurrentCount < 30) {
+            birdActionNow = "mid";
+            birdCurrentCount = 0;
+          }
+        }
+        birdCurrentCount++;
+
+        // score
+        drawScore(scoreCount);
+      };
+
+      interval = setInterval(loop, 16);
+
+      // stop
+      const stop = () => {
+        clearInterval(interval);
+        interval = null;
+        const gameover = new Image();
+        gameover.src = "assets/gameover.png";
+        gameover.onload = () => {
+          context.drawImage(gameover, width / 2 - 96, 30);
+        };
+        const play = new Image();
+        play.src = "assets/message.png";
+        play.onload = () => {
+          context.drawImage(play, width / 2 - 92, 170);
+        };
+        start = false;
+      };
+    </script>
+  </body>
+</html>
