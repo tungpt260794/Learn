@@ -6,22 +6,34 @@
     <title>Flappy Bird</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
-  <body>
+  <body
+    style="display: grid; justify-content: center; height: 100vh; align-items: center"
+  >
     <script type="text/javascript">
       // create canvas
       const canvas = document.createElement("canvas");
       const context = canvas.getContext("2d");
       const width = 288;
       const height = 512;
-      let start = true;
+      let start = false;
       let interval = null;
       canvas.width = width;
       canvas.height = height;
       document.body.appendChild(canvas);
 
+      const wing = document.createElement("audio");
+      wing.src = "assets/wing.ogg";
+      const hit = document.createElement("audio");
+      hit.src = "assets/hit.ogg";
+      const die = document.createElement("audio");
+      die.src = "assets/die.ogg";
+      const point = document.createElement("audio");
+      point.src = "assets/point.ogg";
+
       canvas.addEventListener("click", () => {
         if (start) {
           birdSpeedY = -5;
+          wing.play();
         } else {
           backgroundX = 0;
           baseX = 0;
@@ -124,6 +136,15 @@
 
       let scoreCount = 0;
 
+      const play = new Image();
+      play.src = "assets/message.png";
+      background.onload = () => {
+        context.drawImage(background, backgroundX, backgroundY);
+        play.onload = () => {
+          context.drawImage(play, width / 2 - 92, 100);
+        };
+      };
+
       const loop = () => {
         // background
         backgroundX--;
@@ -162,6 +183,7 @@
         }
         if (pipeX == width - 154 - 52 - 34) {
           scoreCount++;
+          point.play();
         }
 
         if (birdY < 0) {
@@ -198,10 +220,10 @@
         drawScore(scoreCount);
       };
 
-      interval = setInterval(loop, 16);
-
       // stop
       const stop = () => {
+        hit.play();
+        die.play();
         clearInterval(interval);
         interval = null;
         const gameover = new Image();
@@ -209,11 +231,7 @@
         gameover.onload = () => {
           context.drawImage(gameover, width / 2 - 96, 30);
         };
-        const play = new Image();
-        play.src = "assets/message.png";
-        play.onload = () => {
-          context.drawImage(play, width / 2 - 92, 170);
-        };
+        context.drawImage(play, width / 2 - 92, 170);
         start = false;
       };
     </script>
