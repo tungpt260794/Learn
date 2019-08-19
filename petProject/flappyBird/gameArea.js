@@ -1,7 +1,7 @@
 const gameArea = async function(imgs) {
   // resources
   const imgBg = await findImageByName(imgs, "backgroundDay");
-  const imgBtnPlay = await await findImageByName(imgs, "btnPlay");
+  const imgBtnPlay = await findImageByName(imgs, "btnPlay");
   const imgGameOver = await findImageByName(imgs, "gameOver");
   const imgBase = await findImageByName(imgs, "base");
   const imgPipeRed = await findImageByName(imgs, "pipeRed");
