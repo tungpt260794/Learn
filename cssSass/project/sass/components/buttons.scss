@@ -1,0 +1,73 @@
+.btn {
+  text-decoration: none;
+  text-transform: uppercase;
+  padding: 15px 40px;
+  display: inline-block;
+  border-radius: 100px;
+  font-size: 1.6rem;
+  position: relative;
+
+  &::after {
+    content: "";
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    border-radius: 100px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    transition: all 0.4s;
+    -webkit-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    -ms-transition: all 0.4s;
+    -o-transition: all 0.4s;
+  }
+
+  &:link,
+  &:visited {
+    text-decoration: none;
+    text-transform: uppercase;
+    padding: 15px 40px;
+    display: inline-block;
+    border-radius: 100px;
+    font-size: 1.6rem;
+    position: relative;
+  }
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 20px rgba($color-black, 0.2);
+
+    &::after {
+      transform: scaleX(1.4) scaleY(1.6);
+      -webkit-transform: scaleX(1.4) scaleY(1.6);
+      -moz-transform: scaleX(1.4) scaleY(1.6);
+      -ms-transform: scaleX(1.4) scaleY(1.6);
+      -o-transform: scaleX(1.4) scaleY(1.6);
+      opacity: 0;
+    }
+  }
+
+  &:active {
+    outline: none;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 10px rgba($color-black, 0.2);
+  }
+
+  &--white {
+    background-color: $color-white;
+    color: $color-gray;
+
+    &::after {
+      background-color: $color-white;
+    }
+  }
+
+  &--animated {
+    animation-name: moveInButton;
+    animation-duration: 0.5s;
+    animation-delay: 0.75s;
+    animation-fill-mode: backwards;
+  }
+}

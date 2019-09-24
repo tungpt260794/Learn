@@ -1,0 +1,54 @@
+extends ../layout
+
+block content
+  -
+    var test = 1;
+  div.container-fluid
+    //- DataTales Example
+    .card.shadow.mb-4
+      .card-header.py-3
+        h6.m-0.font-weight-bold.text-primary Danh sách tài khoản
+      .card-body
+        .table-responsive
+          table#dataTable.table.table-bordered(width='100%' cellspacing='0')
+            thead
+              tr
+                th Tài khoản
+                th Loại
+                th Trạng thái
+            tfoot
+              tr
+                th Tài khoản
+                th Loại
+                th Trạng thái
+            tbody
+              each acc in accounts
+                tr
+                  th=acc.username
+                  th=acc.type
+                  th=acc.status.type
+
+
+  script.
+    $(document).ready(function() {
+      const table = $('#dataTable').DataTable({
+        language: {
+          search: "Tìm kiếm:",
+          info: "Hiển thị _START_ đến _END_ của _TOTAL_ tài khoản",
+          infoEmpty: "Hiển thị 0 đến 0 của 0 tài khoản",
+          lengthMenu: "Hiển thị _MENU_ tài khoản",
+          emptyTable: "Không có dữ liệu",
+          paginate: {
+            first: "Trang đầu",
+            last:       "Trang cuối",
+            next:       ">",
+            previous:   "<"
+          }
+        }
+      });
+      table
+        .column( '0:visible' )
+        .order( 'asc' )
+        .draw();
+    });
+

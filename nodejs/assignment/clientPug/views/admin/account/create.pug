@@ -1,0 +1,106 @@
+extends ../layout
+
+block content
+  //- Main Content
+  //- Begin Page Content
+  div.container-fluid
+    form#frmCreateAccount.form.shadow
+      div.form-group
+        label.label(for="ipUsername") Tài khoản
+        input#ipUsername.form-control.form-control-user(type='text' name="username" placeholder='Nhập tài khoản bạn muốn tạo...')
+        p#errUsername.err
+      div.form-group
+        label.label(for="ipPassword") Mật khẩu
+        input#ipPassword.form-control.form-control-user(type='password' name="password" placeholder='Nhập mật khẩu bạn muốn tạo...')
+        p#errPassword.err
+      div.form-group
+        label.label(for="ipPasswordConfirm") Xác nhận mật khẩu
+        input#ipPasswordConfirm.form-control.form-control-user(type='password' name="passwordConfirm" placeholder='Xác nhận lại mật khẩu vừa nhập...')
+        p#errPasswordConfirm.err
+      div.form-group
+        label.label(for="ipStatus") Trạng thái
+        select#ipStatus.form-control.form-control-user(name="status")
+          each status in listStatus
+            option(value=status._id selected=(status.type === 'waiting active' ? true : false))=status.type
+      button#btnCreateAccount.btn.btn-primary.btn-user.btn-block(type='submit')
+        | Tạo tài khoản
+
+  script.
+    $(document).ready(() => {
+      const elmIpUsername = $('#ipUsername');
+      const elmErrUsername = $('#errUsername')
+      const elmIpPassword = $('#ipPassword');
+      const elmErrPassword = $('#errPassword')
+      const elmIpPasswordConfirm = $('#ipPasswordConfirm');
+      const elmErrPasswordConfirm = $('#errPasswordConfirm')
+      const elmIpStatus = $('#ipStatus');
+      const elmBtnCreateAccount = $('#btnCreateAccount');
+
+      elmBtnCreateAccount.click((event) => {
+        event.preventDefault();
+        let isValidUsername = false;
+        let isValidPassword = false;
+        let isValidPasswordConfirm = false;
+        const username = elmIpUsername.val();
+        const password = elmIpPassword.val();
+        const passwordConfirm = elmIpPasswordConfirm.val();
+        const status = elmIpStatus.children("option:selected").val();
+
+        if(!username) {
+          elmErrUsername.text("Bạn quên chưa nhập tên tài khoản");
+          isValidUsername = false;
+        }else{
+          elmErrUsername.text("");
+          isValidUsername = true;
+        }
+
+        if(!password) {
+          elmErrPassword.text("Bạn quên chưa nhập mật khẩu");
+          isValidPassword = false;
+        }else{
+          elmErrPassword.text("");
+          isValidPassword = true;
+        }
+
+        if(!passwordConfirm) {
+          elmErrPasswordConfirm.text("Bạn quên chưa xác nhận lại mật khẩu");
+          isValidPasswordConfirm = false;
+        }else if(passwordConfirm != password) {
+          elmErrPasswordConfirm.text("Mật khẩu xác nhận và mật khẩu không giống nhau");
+          isValidPasswordConfirm = false;
+        }else{
+          elmErrPasswordConfirm.text("")
+          isValidPasswordConfirm = true;
+        }
+
+        if(isValidUsername && isValidPassword && isValidPasswordConfirm) {
+          fetch('/admin/account/create', {
+            method: 'POST',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            redirect: 'follow',
+            referrer: 'no-referrer',
+            body: JSON.stringify({username, password, passwordConfirm, status})
+          })
+          .then(async res => await res.json())
+          .then(json => {
+            if(json.status === "error") {
+              toastr.error('', 'Tạo tài khoản không thành công.', {
+                toastClass: 'toast-error',
+                positionClass:'toast-bottom-left'
+              })
+            }else {
+              toastr.success('', 'Tạo tài khoản thành công.', {
+                toastClass: 'toast-success',
+                positionClass:'toast-bottom-left'
+              })
+            }
+          })
+          .catch(err => console.log(err));
+        }
+      });
+    });

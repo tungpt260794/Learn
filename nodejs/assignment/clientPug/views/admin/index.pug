@@ -1,0 +1,81 @@
+extends layout
+
+block content
+  //- Main Content
+  //- Begin Page Content
+  div.container-fluid
+      //- Content Row
+      div.row
+        //- Post Total
+        div.col-xl-3.col-md-6.mb-4
+          div.card.border-left-primary.shadow.h-100.py-2
+            div.card-body
+              div.row.no-gutters.align-items-center
+                div.col.mr-2
+                  div.text-xs.font-weight-bold.text-primary.text-uppercase.mb-1 Tổng số bài viết
+                  div.h5.mb-0.font-weight-bold.text-gray-800 1
+                div.col-auto
+                  i.fas.fa-file-signature.fa-2x.text-gray-300
+        //- Active Post Total
+        div.col-xl-3.col-md-6.mb-4
+          div.card.border-left-success.shadow.h-100.py-2
+            div.card-body
+              div.row.no-gutters.align-items-center
+                div.col.mr-2
+                  div.text-xs.font-weight-bold.text-success.text-uppercase.mb-1 Tổng số bài viết đã đăng
+                  div.h5.mb-0.font-weight-bold.text-gray-800 0
+                div.col-auto
+                  i.fas.fa-check.fa-2x.text-gray-300
+        //- Account Total
+        div.col-xl-3.col-md-6.mb-4
+          div.card.border-left-primary.shadow.h-100.py-2
+            div.card-body
+              div.row.no-gutters.align-items-center
+                div.col.mr-2
+                  div.text-xs.font-weight-bold.text-primary.text-uppercase.mb-1 Tổng số tài khoản
+                  div.h5.mb-0.font-weight-bold.text-gray-800 0
+                div.col-auto
+                  i.fas.fa-user.fa-2x.text-gray-300
+        //- Pending Requests
+        div.col-xl-3.col-md-6.mb-4
+          div.card.border-left-warning.shadow.h-100.py-2
+            div.card-body
+              div.row.no-gutters.align-items-center
+                div.col.mr-2
+                  div.text-xs.font-weight-bold.text-warning.text-uppercase.mb-1 Tổng số bài viết đang đợi duyệt
+                  div.h5.mb-0.font-weight-bold.text-gray-800 0
+                div.col-auto
+                  i.fas.fa-clock.fa-2x.text-gray-300
+      //- Content Row
+      div.row
+        div.col-lg-6.mb-4
+          div.card.bg-primary.text-white.shadow
+            div.card-body
+              | Primary
+              div.text-white-50.small #4e73df
+        div.col-lg-6.mb-4
+          div.card.bg-success.text-white.shadow
+            div.card-body
+              | Success
+              div.text-white-50.small #1cc88a
+        div.col-lg-6.mb-4
+          div.card.bg-info.text-white.shadow
+            div.card-body
+              | Info
+              div.text-white-50.small #36b9cc
+        div.col-lg-6.mb-4
+          div.card.bg-warning.text-white.shadow
+            div.card-body
+              | Warning
+              div.text-white-50.small #f6c23e
+        div.col-lg-6.mb-4
+          div.card.bg-danger.text-white.shadow
+            div.card-body
+              | Danger
+              div.text-white-50.small #e74a3b
+        div.col-lg-6.mb-4
+          div.card.bg-secondary.text-white.shadow
+            div.card-body
+              | Secondary
+              div.text-white-50.small #858796
+  //- End of Main Content

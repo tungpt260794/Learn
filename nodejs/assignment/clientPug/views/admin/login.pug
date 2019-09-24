@@ -1,0 +1,89 @@
+extends layout-auth
+
+block content
+  .container
+    //- Outer Row
+    div.row.justify-content-center
+      div.col-xl-10.col-lg-12.col-md-9.grid-center
+        div.card.o-hidden.border-0.shadow-lg.my-5
+          div.card-body.p-0
+            //- Nested Row within Card Body
+            div.row
+              div.col-lg-6.d-none.d-lg-block.bg-login-image
+              div.col-lg-6
+                div.p-5
+                  div.text-center
+                    h1.h4.text-gray-900.mb-4 Chào mừng trở lại !
+                  form.user
+                    div.form-group
+                      input#ipUsername.form-control.form-control-user(type='email' aria-describedby='emailHelp' placeholder='Nhập tài khoản của bạn...')
+                      p#errUsername.err(style="text-align: center;")
+                    div.form-group
+                      input#ipPassword.form-control.form-control-user(type='password' placeholder='Nhập mật khẩu của bạn...')
+                      p#errPassword.err(style="text-align: center;")
+                    div.form-group
+                      div.custom-control.custom-checkbox.small.flex-flexEnd
+                        input#customCheck.custom-control-input(type='checkbox')
+                        label.custom-control-label(for='customCheck') Giữ đăng nhập
+                    button#btnLogin.btn.btn-primary.btn-user.btn-block(href='/admin')
+                      | Đăng nhập
+
+  script.
+    $(document).ready(() => {
+      const elmIpUsername = $('#ipUsername');
+      const elmErrUsername = $('#errUsername')
+      const elmIpPassword = $('#ipPassword');
+      const elmErrPassword = $('#errPassword')
+      const elmBtnLogin = $('#btnLogin');
+
+      elmBtnLogin.click((event) => {
+        event.preventDefault();
+        let isValidUsername = false;
+        let isValidPassword = false;
+        const username = elmIpUsername.val();
+        const password = elmIpPassword.val();
+
+        if(!username) {
+          elmErrUsername.text("Bạn quên chưa nhập tài khoản của bạn");
+          isValidUsername = false;
+        }else{
+          elmErrUsername.text("");
+          isValidUsername = true;
+        }
+
+        if(!password) {
+          elmErrPassword.text("Bạn quên chưa nhập mật khẩu của bạn");
+          isValidPassword = false;
+        }else{
+          elmErrPassword.text("");
+          isValidPassword = true;
+        }
+
+        if(isValidUsername && isValidPassword) {
+          fetch('/admin/login', {
+            method: 'POST',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            redirect: 'follow',
+            referrer: 'no-referrer',
+            body: JSON.stringify({username, password})
+          })
+          .then(async res => await res.json())
+          .then(json => {
+            if(json.status === "error") {
+              toastr.error('', 'Đăng nhập không thành công', {
+                toastClass: 'toast-error',
+                positionClass:'toast-bottom-left'
+              })
+            }else {
+              window.location.href = "/admin";
+            }
+          })
+          .catch(err => console.log(err));
+        }
+      });
+    });

@@ -1,0 +1,23 @@
+{
+  "name": "components-input",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "./node_modules/.bin/babel src --out-file index.js -w"
+  },
+  "keywords": [],
+  "author": "tungpt",
+  "license": "ISC",
+  "peerDependencies": {
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.6.2",
+    "@babel/core": "^7.6.2",
+    "@babel/preset-env": "^7.6.2",
+    "@babel/preset-react": "^7.0.0"
+  }
+}

@@ -1,0 +1,41 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  form#fmLogin(action="/", method="post")
+    input#ipUsername(type="text", placeholder="Enter username")
+    input#ipPassword(type="password", placeholder="Enter password")
+    button#btnLogin(type="submit") login
+
+  script.
+    const fmLogin = document.getElementById("fmLogin");
+    const ipUsername = document.getElementById("ipUsername");
+    const ipPassword = document.getElementById("ipPassword");
+    const btnLogin = document.getElementById("btnLogin");
+
+    btnLogin.addEventListener('click', e => {
+      e.preventDefault();
+      const username = ipUsername.value;
+      const password = ipPassword.value;
+
+      fetch('/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          username,
+          password
+        })
+      }).then(async res => {
+        return await res.json()
+      }).then(data => {
+        if(data.token){
+          document.cookie = `token=${data.token}`
+          window.location.href = "/users";
+        }else {
+          alert('login failed');
+        }
+      })
+    })

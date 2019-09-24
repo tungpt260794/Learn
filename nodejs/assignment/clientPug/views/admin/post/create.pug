@@ -1,0 +1,163 @@
+extends ../layout
+
+block content
+  //- Main Content
+  //- Begin Page Content
+  div.container-fluid
+    form#frmCreatePost.form.shadow
+      div.form-group
+        label.label(for="ipTitle") Tiêu đề
+        input#ipTitle.form-control.form-control-user(type='text' name="title" placeholder='Nhập tiều đề bài viết của bạn...')
+        p#errTitle.err
+      div.form-group
+        label.label(for="ipSubTitle") Tiêu đề
+        input#ipSubTitle.form-control.form-control-user(type='text' name="subTitle" placeholder='Nhập tiều đề bài viết của bạn...')
+      div.form-group
+        label.label(for="ipContent") Nội dung
+        textarea#ipContent.form-control-user
+        p#errContent.err
+      button#btnCreatePost.btn.btn-primary.btn-user.btn-block(type='submit')
+        | Tạo bài viết
+
+  script.
+    $(document).ready(() => {
+      let isValidTitle = false;
+      let isValidContent = false;
+      const elmIpTitle = $('#ipTitle');
+      const elmErrTitle = $('#errTitle');
+      const elmIpSubTitle = $('#ipSubTitle');
+      const elmContent = $('#ipContent');
+      const elmErrContent = $('#errContent');
+      const elmBtnCreatePost = $('#btnCreatePost');
+
+      const editor = new FroalaEditor('#ipContent', {
+        codeMirror: window.CodeMirror,
+        codeMirrorOptions: {
+          indentWithTabs: true,
+          lineNumbers: true,
+          lineWrapping: true,
+          mode: 'text/html',
+          tabMode: 'indent',
+          tabSize: 2
+        },
+        tabSpaces: 2,
+        fontSizeSelection: true,
+        fontFamilySelection: true,
+        pasteDeniedAttrs: ['class', 'id'],
+        placeholderText: "Nhập nội dung bài viết của bạn...",
+        imageDefaultAlign: 'left',
+        dragInline: false,
+        enter: window.FroalaEditor.ENTER_DIV,
+        lineBreakerOffset: 0,
+        language: 'es',
+        heightMin: 'calc(100vh - 580px)',
+        imageUploadParam: 'post-image',
+        imageUploadURL: '/upload-image',
+        events: {
+          contentChanged: () => {
+            // Do something here.
+            // this is the editor instance.
+            console.log(elmContent.val());
+          },
+          'image.beforeUpload': function (images) {
+            console.log(images);
+            // Return false if you want to stop the image upload.
+          },
+          'image.uploaded': function (response) {
+            console.log(response);
+            // Image was uploaded to the server.
+          },
+          'image.inserted': function ($img, response) {
+            console.log($img)
+            console.log(response)
+            // Image was inserted in the editor.
+          },
+          'image.replaced': function ($img, response) {
+            console.log($img)
+            console.log(response)
+            // Image was replaced in the editor.
+          },
+          'image.error': function (error, response) {
+            console.log(error)
+            console.log(response)
+            // Bad link.
+            if (error.code == 1) {  }
+
+            // No link in upload response.
+            else if (error.code == 2) {  }
+
+            // Error during image upload.
+            else if (error.code == 3) {  }
+
+            // Parsing response failed.
+            else if (error.code == 4) {  }
+
+            // Image too text-large.
+            else if (error.code == 5) {  }
+
+            // Invalid image type.
+            else if (error.code == 6) {  }
+
+            // Image can be uploaded only to same domain in IE 8 and IE 9.
+            else if (error.code == 7) {  }
+
+            // Response contains the original server response to the request if available.
+          }
+        }
+      });
+
+      elmBtnCreatePost.click((event) => {
+        event.preventDefault();
+        let isValidTitle = false;
+        let isValidContent = false;
+        const title = elmIpTitle.val();
+        const content = elmContent.val();
+        const subTitle = elmIpSubTitle.val()
+
+        if(!title) {
+          elmErrTitle.text("Bạn quên chưa nhập tiêu đề bài viết");
+          isValidTitle = false;
+        }else{
+          elmErrTitle.text("");
+          isValidTitle = true;
+        }
+
+        if(!content) {
+          elmErrContent.text("Bạn quên chưa nhập nội dung bài viết");
+          isValidContent = false;
+        }else{
+          elmErrContent.text("");
+          isValidContent = true;
+        }
+
+        if(isValidTitle && isValidContent) {
+          fetch('/admin/post/create', {
+            method: 'POST',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            redirect: 'follow',
+            referrer: 'no-referrer',
+            body: JSON.stringify({title, content, subTitle})
+          })
+          .then(async res => await res.json())
+          .then(json => {
+            if(json.status === "error") {
+              toastr.error('', 'Tạo bài viết không thành công.', {
+                toastClass: 'toast-error',
+                positionClass:'toast-bottom-left'
+              })
+            }else {
+              toastr.success('', 'Tạo bài viết thành công.', {
+                toastClass: 'toast-success',
+                positionClass:'toast-bottom-left'
+              })
+            }
+          })
+          .catch(err => console.log(err));
+        }
+      });
+    });

@@ -1,0 +1,121 @@
+include admin-mixi
+
+doctype html
+html
+  include header
+  body#page-top
+    //- Page Wrapper
+    #wrapper
+      //- Sidebar
+      ul#accordionSidebar.navbar-nav.bg-gradient-primary.sidebar.sidebar-dark.accordion
+        //- Sidebar - Brand
+        a.sidebar-brand.d-flex.align-items-center.justify-content-center(href='/admin')
+          div.sidebar-brand-icon.rotate-n-15
+            i.fas.fa-laugh-wink
+          div.sidebar-brand-text.mx-3
+            | PTT Admin
+        //- Divider
+        hr.sidebar-divider.my-0
+        //- Nav Item - Dashboard
+        li.nav-item.active
+          a.nav-link(href='/admin')
+            i.fas.fa-fw.fa-tachometer-alt
+            span Dashboard
+        //- Divider
+        hr.sidebar-divider
+        //- Heading
+        div.sidebar-heading
+          | Quản lý
+        //- Nav Item - Pages Collapse Menu
+        +renderAdminNav(baseUrl)
+        //- Divider
+        hr.sidebar-divider.d-none.d-md-block
+        //- Sidebar Toggler (Sidebar)
+        div.text-center.d-none.d-md-inline
+          button#sidebarToggle.rounded-circle.border-0
+      //- End of Sidebar
+      //- Content Wrapper
+      div#content-wrapper.d-flex.flex-column
+        div#content
+          //- Topbar
+          nav.navbar.navbar-expand.navbar-light.bg-white.topbar.mb-4.static-top.shadow
+            //- Sidebar Toggle (Topbar)
+            button#sidebarToggleTop.btn.btn-link.d-md-none.rounded-circle.mr-3
+              i.fa.fa-bars
+            //- Topbar Navbar
+            ul.navbar-nav.ml-auto
+              div.topbar-divider.d-none.d-sm-block
+              //- Nav Item - User Information
+              li.nav-item.dropdown.no-arrow
+                a#userDropdown.nav-link.dropdown-toggle(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
+                  span.mr-2.d-none.d-lg-inline.text-gray-600.small Phan Thanh Tùng
+                  img.img-profile.rounded-circle(src='https://source.unsplash.com/QAB-WJcbgJk/60x60')
+                //- Dropdown - User Information
+                div.dropdown-menu.dropdown-menu-right.shadow.animated--grow-in(aria-labelledby='userDropdown')
+                  a.dropdown-item.user-subMenu(href='#')
+                    i.fas.fa-user.fa-sm.fa-fw.mr-2.text-gray-400.mg-l-0_5rem-imp
+                    | Profile
+                  div.dropdown-divider
+                  a.dropdown-item.user-subMenu(href='#' data-toggle='modal' data-target='#logoutModal')
+                    i.fas.fa-sign-out-alt.fa-sm.fa-fw.mr-2.text-gray-400.mg-l-0_5rem-imp
+                    | Logout
+          //- End of Topbar
+          block content
+
+        //- Footer
+        footer.sticky-footer.bg-white.mg-top-1_5rem
+          div.container.my-auto
+            div.copyright.text-center.my-auto
+              span Copyright &copy; Phan Thanh Tùng
+        //- End of Footer
+        //- End of Content Wrapper
+        //- End of Page Wrapper
+        //- Scroll to Top Button
+        a.scroll-to-top.rounded(href='#page-top')
+          i.fas.fa-angle-up
+        //- Logout Modal
+        div#logoutModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+          div.modal-dialog(role='document')
+            div.modal-content
+              div.modal-header
+                h5#exampleModalLabel.modal-title Ready to Leave?
+                button.close(type='button' data-dismiss='modal' aria-label='Close')
+                  span(aria-hidden='true') &times;
+              div.modal-body Select &quot;Logout&quot; below if you are ready to end your current session.
+              div.modal-footer
+                button.btn.btn-secondary(type='button' data-dismiss='modal') Cancel
+                button#btnLogout.btn.btn-primary Logout
+
+    //- Custom scripts for all pages
+    script(src='/javascripts/sb-admin-2.min.js')
+    script.
+      $(document).ready(() => {
+        const elmBtnLogout = $('#btnLogout');
+
+        elmBtnLogout.click(() => {
+          fetch('/admin/logout', {
+            method: 'GET',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            redirect: 'follow',
+            referrer: 'no-referrer'
+          })
+          .then(async res => await res.json())
+          .then(json => {
+            if(json.status === "error") {
+              toastr.error('', 'Đăng xuất không thành công.', {
+                toastClass: 'toast-error',
+                positionClass:'toast-bottom-left'
+              })
+            }else {
+              window.location.href = "/admin/login";
+            }
+          })
+          .catch(err => console.log(err));
+        })
+      })
+

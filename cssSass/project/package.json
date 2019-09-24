@@ -1,0 +1,16 @@
+{
+  "name": "project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "sasstocss": "node-sass ./sass/main.scss ./css/style.css -w"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "node-sass": "^4.12.0"
+  }
+}

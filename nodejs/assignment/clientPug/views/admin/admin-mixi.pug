@@ -1,0 +1,37 @@
+//- render html nav of admin
+mixin renderAdminNav(baseUrl)
+  -
+    const items = [
+      {
+        id: "post",
+        title: "Bài viết",
+        icon: "fa-file-signature",
+        actions: [
+          {href: "/admin/post/create", label: "Tạo bài viết"},
+          {href: "/admin/post", label: "Danh sách bài viết"}
+        ]
+      },
+      {
+        id: "account",
+        title: "Tài khoản",
+        icon: "fa-user",
+        actions: [
+          {href: "/admin/account/create", label: "Tạo tài khoản"},
+          {href: "/admin/account", label: "Danh sách tài khoản"}
+        ]
+      }
+    ]
+
+  each item in items
+    li.nav-item
+      a.nav-link.collapsed(class=(baseUrl.indexOf(item.id) != -1 ? 'cl-fff-imp' : '') href='#' data-toggle='collapse' data-target=`#collapse${item.id}` aria-expanded='true' aria-controls=`#collapse${item.id}`)
+        i.fas.fa-fw(class=item.icon class=(baseUrl.indexOf(item.id) != -1 ? 'cl-fff-imp' : ''))
+        span=item.title
+      div.collapse(id=`collapse${item.id}` class=(item.actions.filter(action => action.href == baseUrl).length > 0 ? "show" : "") aria-labelledby='headingTwo' data-parent='#accordionSidebar')
+        div.bg-white.py-2.collapse-inner.rounded
+          h6.collapse-header Tác vụ
+          each action in item.actions
+            a.collapse-item(class=(baseUrl === action.href ? "active" : "") href=action.href)=action.label
+
+
+
